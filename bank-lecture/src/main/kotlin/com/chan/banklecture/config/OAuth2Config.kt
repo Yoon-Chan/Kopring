@@ -18,9 +18,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConfigurationProperties("oauth2")
 class OAuth2Config {
-
     val providers: MutableMap<String, Oauth2ProviderValues> = mutableMapOf()
-
 }
 
 data class Oauth2ProviderValues(
