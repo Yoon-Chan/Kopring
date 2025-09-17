@@ -34,6 +34,9 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("mysql:mysql-connector-java:8.0.33")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    //okhttp client
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 kotlin {
