@@ -1,5 +1,7 @@
 package com.chan.banklecture.domains.auth.service
 
+import com.chan.banklecture.common.exception.CustomException
+import com.chan.banklecture.common.exception.ErrorCode
 import com.chan.banklecture.config.OAuth2Config
 import com.chan.banklecture.interfaces.Oauth2TokenResponse
 import com.chan.banklecture.interfaces.Oauth2UerResponse
@@ -12,7 +14,7 @@ private const val key = "google"
 class GoogleAuthService(
     private val config: OAuth2Config
 ): OauthServiceInterface {
-    private val oAuthInfo = config.providers[key] ?: throw TODO("custom Exception")
+    private val oAuthInfo = config.providers[key] ?: throw CustomException(ErrorCode.AUTH_CONFIG_NOT_FOUND, key)
     override val provideName: String
         get() = key
 
