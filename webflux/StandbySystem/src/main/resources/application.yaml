@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: name=StandbySystem
+
+server:
+  port: 9000
