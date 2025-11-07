@@ -2,6 +2,7 @@ package org.example.flux.controller
 
 import org.example.flux.dto.AllowUserResponse
 import org.example.flux.dto.AllowedUserResponse
+import org.example.flux.dto.RankNumberResponse
 import org.example.flux.dto.RegisterUserResponse
 import org.example.flux.service.UserQueueService
 import org.springframework.web.bind.annotation.GetMapping
@@ -35,5 +36,10 @@ class UserQueueController(
     @GetMapping("/allowed")
     suspend fun isAllowed(@RequestParam("queue", defaultValue = "default") queue: String, @RequestParam("user_id") userId: Long): AllowedUserResponse {
         return AllowedUserResponse(userQueueService.isAllowed(queue, userId))
+    }
+
+    @GetMapping("/rank")
+    suspend fun getRankUser(@RequestParam("queue", defaultValue = "default") queue: String, @RequestParam("user_id") userId: Long): RankNumberResponse {
+        return RankNumberResponse(userQueueService.getRank(queue, userId))
     }
 }

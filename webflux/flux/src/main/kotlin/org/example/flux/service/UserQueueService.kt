@@ -71,4 +71,12 @@ class UserQueueService(
             .map { it >= 0 }
             .awaitSingle()
     }
+
+    suspend fun getRank(queue: String, userId: Long): Long {
+        val proceedKey = "$USER_QUEUE_KEY:$queue:wait"
+        return reactiveRedisTemplate.opsForZSet().rank(proceedKey, userId.toString())
+            .defaultIfEmpty(-1L)
+            .map { if(it == -1L) -1 else it + 1 }
+            .awaitSingle()
+    }
 }

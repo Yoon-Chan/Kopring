@@ -89,4 +89,15 @@ class UserQueueServiceTest {
         userQueueService.allowUser("default", 1L)
         assertThat(userQueueService.isAllowed("default", 100L)).isEqualTo(true)
     }
+
+    @Test
+    fun getRank() = runTest {
+        userQueueService.registerWaitQueue("default", 100L)
+        assertThat(userQueueService.getRank("default", 100L)).isEqualTo(1)
+    }
+
+    @Test
+    fun emptyRank() = runTest {
+        assertThat(userQueueService.getRank("default", 100L)).isEqualTo(-1)
+    }
 }
