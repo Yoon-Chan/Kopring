@@ -91,6 +91,14 @@ class UserQueueServiceTest {
     }
 
     @Test
+    fun isAllowedByToken() = runTest {
+        userQueueService.registerWaitQueue("default", 100L)
+        userQueueService.allowUser("default", 1L)
+        assertThat(userQueueService.isAllowedByToken("default", 100L, "")).isEqualTo(false)
+        assertThat(userQueueService.isAllowedByToken("default", 100L, "d333a5d4eb24f3f5cdd767d79b8c01aad3cd73d3537c70dec430455d37afe4b8")).isEqualTo(true)
+    }
+
+    @Test
     fun getRank() = runTest {
         userQueueService.registerWaitQueue("default", 100L)
         assertThat(userQueueService.getRank("default", 100L)).isEqualTo(1)
@@ -99,5 +107,11 @@ class UserQueueServiceTest {
     @Test
     fun emptyRank() = runTest {
         assertThat(userQueueService.getRank("default", 100L)).isEqualTo(-1)
+    }
+
+    @Test
+    fun generateToken() = runTest {
+        val token = userQueueService.generateToken("default", 100L)
+        assertThat(token).isEqualTo("d333a5d4eb24f3f5cdd767d79b8c01aad3cd73d3537c70dec430455d37afe4b8")
     }
 }

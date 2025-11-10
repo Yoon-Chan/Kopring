@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.server.ServerWebExchange
 
 @Controller
 class WaitingRoomController(
@@ -16,9 +17,13 @@ class WaitingRoomController(
         @RequestParam("queue", defaultValue = "default") queue: String,
         @RequestParam("user_id") userId: Long,
         @RequestParam("redirect_url") redirectUrl: String,
-        model: Model
+        model: Model,
+        serverWebExchange: ServerWebExchange
     ): String {
-        if(userQueueService.isAllowed(queue, userId)) {
+        val key = "user-queue-$queue-token"
+
+        val token = serverWebExchange.request.cookies.getFirst(key)?.value ?: ""
+        if(userQueueService.isAllowedByToken(queue, userId, token)) {
             return "redirect:$redirectUrl"
         }
 
