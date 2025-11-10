@@ -1,10 +1,10 @@
-package org.example.coupon
+package org.example.coupon.api
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class CouponApplicationTests {
+class CouponApiApplicationTests {
 
     @Test
     fun contextLoads() {
