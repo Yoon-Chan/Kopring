@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
+    kotlin("kapt") version "1.9.25" // 추가
 }
 
 group = "org.example"
@@ -23,6 +24,8 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.springframework.boot")
+    apply(plugin = "org.jetbrains.kotlin.kapt") // ✅ 이게 정식 id
+    apply(plugin = "org.jetbrains.kotlin.jvm")
 
     repositories {
         mavenCentral()
@@ -36,12 +39,12 @@ subprojects {
         runtimeOnly("com.h2database:h2")
         runtimeOnly("com.mysql:mysql-connector-j")
         implementation("org.springframework.boot:spring-boot-starter")
-        implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
         implementation("io.micrometer:micrometer-registry-prometheus")
-        annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
-        annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-        annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+        implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+        kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+        kapt("jakarta.annotation:jakarta.annotation-api")
+        kapt("jakarta.persistence:jakarta.persistence-api")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 }

@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 class Coupon(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    var id: Long? = null,
 
     @Column(nullable = false)
     var title: String,
@@ -25,7 +25,7 @@ class Coupon(
     var issuedQuantity: Int,
 
     @Column(nullable = false)
-    var minAvailableAmount: Int,
+    var minAvailableAmount: Int = 0,
 
     @Column(nullable = false)
     var dateIssueStart: LocalDateTime,
