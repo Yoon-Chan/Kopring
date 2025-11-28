@@ -1,5 +1,6 @@
 package org.example.flux.service
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.example.flux.EmbeddedRedis
@@ -12,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import kotlin.random.Random
+import kotlin.random.nextLong
 
 @SpringBootTest
 @Import(EmbeddedRedis::class)
@@ -22,6 +27,9 @@ class UserQueueServiceTest {
     @Autowired
     lateinit var reactiveRedisTemplate: ReactiveRedisTemplate<String, String>
 
+
+    val timeGetter: Long
+        get() = Random.nextLong(100)
     @BeforeEach
     fun setUp() {
         val redisConnection = reactiveRedisTemplate.connectionFactory.reactiveConnection
@@ -113,5 +121,25 @@ class UserQueueServiceTest {
     fun generateToken() = runTest {
         val token = userQueueService.generateToken("default", 100L)
         assertThat(token).isEqualTo("d333a5d4eb24f3f5cdd767d79b8c01aad3cd73d3537c70dec430455d37afe4b8")
+    }
+
+    @Test
+    fun getSetterTest() = runTest {
+        val time = 12341234
+
+        repeat(10) {
+            delay(1000)
+            println("time : $timeGetter")
+        }
+    }
+
+    @Test
+    fun dataclassTest() {
+        data class A(val list: List<Int> = listOf())
+        val a = A()
+
+        val b = a.copy(list = a.list + 1)
+        println(b)
+        println(a)
     }
 }

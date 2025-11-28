@@ -1,6 +1,8 @@
 package org.example.coupon.core.model
 
 import jakarta.persistence.*
+import org.example.coupon.core.exception.CouponIssueException
+import org.example.coupon.core.exception.ErrorCode
 import java.time.LocalDateTime
 
 @Entity
@@ -30,4 +32,25 @@ class Coupon(
 
     @Column(nullable = false)
     var dateIssueEnd: LocalDateTime,
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+
+    fun availableIssueQuantity(): Boolean {
+        return totalQuantity?.let { it > issuedQuantity  } ?: true
+    }
+
+    fun availableIssueDate(): Boolean {
+        val now = LocalDateTime.now()
+        return dateIssueStart.isBefore(now) && dateIssueEnd.isAfter(now)
+    }
+
+    fun issue() {
+        if(!availableIssueQuantity()) {
+            throw CouponIssueException(errorCode = ErrorCode.INVALID_COUPON_ISSUE_QUANTITY, "발급 가능한 수량을 초과합니다. total : $totalQuantity, issued : $issuedQuantity")
+        }
+
+        if(!availableIssueDate()) {
+            throw CouponIssueException(errorCode = ErrorCode.INVALID_COUPON_ISSUE_DATE, "발급 가능한 일자가 아닙니다. request : ${LocalDateTime.now()} issueStart : $dateIssueStart, issueEnd : $dateIssueEnd")
+        }
+        issuedQuantity++
+    }
+}
